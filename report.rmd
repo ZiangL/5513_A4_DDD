@@ -24,9 +24,33 @@ dat1 <- read_csv("data/countries.csv")
 data<- read.csv("Data/athlete_events.csv")
 ```
 
+```{r data_wrangling1}
+clean_data <- data %>% 
+  select (c("Sex","Age","Medal")) %>% 
+  mutate(Sex=as.factor(Sex),
+        Medal= as.factor(Medal)) %>% 
+  group_by(Sex,Age) %>% 
+  count(Medal) 
 
+clean_data
+```
+```{r data_wrangling2}
+clean_data1 <- clean_data %>% 
+mutate(age_group = cut(Age,breaks = c(0,15,30,45,60,75,90))) %>% 
+select(-Age) %>% 
+  group_by(Sex,age_group) %>% 
+  count(Medal) %>% 
+  rename(number = "n")
+clean_data1
+```
 
-
+```{r data_wrangling3}
+table1<- clean_data1 %>% 
+    group_by (Sex,age_group) %>% 
+  summarise(total_medal_in_age_group= sum(number))
+  
+table1
+```
 
 
 
