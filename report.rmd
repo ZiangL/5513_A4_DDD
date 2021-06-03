@@ -18,7 +18,18 @@ data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
 
-## How about the Medals of top 5 countries allocated in the events
+## How about the Medals of top 5 countries allocated in the events (Ziang_Li)
+
+```{r}
+top1 <- country_T %>%
+  top_n(5)
+
+aa <- sport_count %>% 
+  arrange(desc(n)) %>% 
+  top_n(5)
+
+```
+
 
 
 
