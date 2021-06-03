@@ -9,10 +9,77 @@ output: html_document
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
+library(broom)
+library(countrycode)
+library(tidytext)
+library(viridis)
+library(rworldmap)
+library(ggmap)
+library(maps)
+library(sp)
+library(maptools)
 library(readr)
+library(ggraph)
+library(igraph)
+library(RColorBrewer)
+library(gganimate)
+library(gifski)
+library(ggalluvial)
+library(hrbrthemes)
+library(kableExtra)
+library(leaflet)
+library (scales)
+library (shiny)
 ```
 
 ```{r}
 data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
+
+# Medal distribution by country
+
+```{r}
+medal <- data %>%
+  filter(!is.na(Medal))
+
+team<- medal %>% 
+  group_by(NOC) %>% 
+  summarise(Gold =  sum (Medal == "Gold"),
+            Silver = sum (Medal == "Silver"),
+            Bronze = sum (Medal == "Bronze"))
+```
+
+```{r}
+team_M <- team %>%
+  pivot_longer(!"NOC", names_to = "medals", values_to = "number_of_medals")
+
+country_M <- countrycode(team_M$NOC, "ioc", "country.name")
+
+country_M <- data_frame(country_M, team_M)
+country_M<- na.omit(country_M)
+```
+
+```{r}
+team_T <- cbind(team, c(rowSums(team [, 2:4], na.rm = TRUE))) 
+colnames(team_T)[5] <- "Total"
+
+country_T <- countrycode(team_T$NOC, "ioc", "country.name")
+
+country_T <- data_frame(country_T, team_T)
+country_T<- na.omit(country_T)
+
+country_T <- country_T %>%
+  arrange(desc(Total)) %>% 
+  rename("Country" = country_T)
+
+country_T_10 <- country_T%>% 
+  top_n(10)
+
+knitr::kable(country_T_10, caption = "The medals in different country", col.names = c("Country",  "NOC", "Gold", "Silver", "Bronze", "Total"))
+```
+
+```{r}
+ct <- inner_join(country_T, dat1, by = "Country")
+```
+
