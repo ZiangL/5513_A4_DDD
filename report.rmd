@@ -25,6 +25,7 @@ library(maps)
 library(sp)
 library(maptools)
 library(readr)
+<<<<<<< HEAD
 library(ggraph)
 library(igraph)
 library(RColorBrewer)
@@ -37,12 +38,17 @@ library(leaflet)
 library (scales)
 library (shiny)
 library(ggalluvial)
+=======
+library(grid)
+library(gridExtra)
+>>>>>>> Qin_Xu
 ```
 
 ```{r}
 data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
+<<<<<<< HEAD
 
 
 
@@ -326,4 +332,156 @@ q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
 animate(q, nframes = 350,fps = 25,  width = 1200, height = 1000, 
         renderer = gifski_renderer("yearly.gif"))
 ```
+=======
+#Introduction 
+
+\section*{Comparing Olympic medals result for athletes of different age by gender}
+## First question: Compare the total medal won by different age for both female and male.
+```{r data}
+data<- read.csv("Data/athlete_events.csv")
+```
+
+```{r data_wrangling1}
+clean_data <- data %>% 
+  select (c("Sex","Age","Medal")) %>% 
+  mutate(Sex=as.factor(Sex),
+        Medal= as.factor(Medal)) %>% 
+  group_by(Sex,Age) %>% 
+  count(Medal) 
+
+clean_data
+```
+```{r data_wrangling2}
+clean_data1 <- clean_data %>% 
+mutate(age_group = cut(Age,breaks = c(0,15,30,45,60,75,90))) %>% 
+select(-Age) %>% 
+  group_by(Sex,age_group) %>% 
+  count(Medal) %>% 
+  rename(number = "n")
+clean_data1
+```
+
+```{r data_wrangling3}
+table1<- clean_data1 %>% 
+    group_by (Sex,age_group) %>% 
+  summarise(total_medal_in_age_group= sum(number))
+  
+table1
+```
+
+```{r table1,  eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+
+percentage<- table1 %>% 
+  group_by(Sex) %>% 
+summarise(total_medal_by_sex =sum(total_medal_in_age_group)) %>% 
+  left_join(table1, by ="Sex") %>% 
+  mutate("Percentage" = ((total_medal_in_age_group/total_medal_by_sex)*100)) 
+
+  knitr::kable (percentage ,caption = "compare the percentage of thetotal medal won by different age groups for both female and male") %>% kable_styling()
+  
+```
+In Table \@ref(tab:table1) we compare the total medal won by different age groups for both female and male.
+
+From this table, it shows that female younger athletes age range from 15- 30 has the highest percentage (32.09%) of total medal won compared to other age group, while older female athletes age from 60 to 75 has the least percentage of medal won (8.02%). However, for males athletes, it appears that age group between (15-30),(30-45),(45-60_ share the same percentage( and highest) of total medal won, while older male athletes age form 75 to 90 again has the least percentage of medal won ( 2.52%).
+
+```{r figure1, fig.cap="The percentage of total medal won in different age group by sex", fig.height = 5, fig.width = 6, fig.align='center', eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+
+plot <- ggplot(data = percentage, 
+                      aes(x = age_group,
+                          y= Percentage,
+                          fill = Sex)) +
+    geom_bar(stat="identity",position ="fill") +
+    ggtitle("Total medal won by different age group for female and male ")
+plot
+```
+
+In Figure \@ref(fig:figure1), we have plotted the percentage of the total medal won by different age group and compared in against both gender of male and female.
+
+\@ref(fig:figure1),  depicts that for the age groups aged (0-15),(15-30),and (30-45), female athletes is accounted of  a higher proportion  of the total medal compared to males, However by the age group (45 to 60), males athletes exceed female athletes in the proportion of  total medal won and continues to have a higher proportion than female in the older age bracket. 
+
+##Second question: Comparison of different medal distribution between age group by gender. 
+
+```{r table2}
+clean_data2 <- data %>% 
+  select (c("Sex","Age","Medal")) %>% 
+  mutate(Sex=as.factor(Sex),
+        Medal= as.factor(Medal)) %>% 
+  group_by(Sex,Age) %>% 
+  count(Medal) %>% 
+  rename("number"=n) 
+  clean_data2 
+
+
+gold1<- clean_data2 %>% 
+  filter(Medal== "Gold") %>% 
+  group_by(Sex) %>% 
+  summarise(total_silver_medal=sum(number)) 
+gold<- clean_data2 %>% 
+  filter(Medal== "Gold") %>% 
+  left_join(gold1 ,by = "Sex") %>% 
+  mutate("Percentage" = ((number/total_silver_medal)*100)) 
+```
+
+```{r table3}
+silver1<- clean_data2 %>% 
+  filter(Medal== "Silver") %>% 
+  group_by(Sex) %>% 
+  summarise(total_silver_medal=sum(number)) 
+silver<- clean_data2 %>% 
+  filter(Medal== "Silver") %>% 
+  left_join(silver1 ,by = "Sex") %>% 
+  mutate("Percentage" = ((number/total_silver_medal)*100)) 
+```
+
+```{r table4}
+bronze1<- clean_data2 %>% 
+  filter(Medal== "Bronze") %>% 
+  group_by(Sex) %>% 
+  summarise(total_bronze_medal=sum(number)) 
+bronze<- clean_data2 %>% 
+  filter(Medal== "Bronze") %>% 
+  left_join(bronze1 ,by = "Sex") %>% 
+  mutate("Percentage" = ((number/total_bronze_medal)*100)) 
+```
+
+```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center", eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+gold
+gold_plot<- ggplot(data=gold, aes(  x= Age,
+                                      y= Percentage,
+                                      fill= Sex)) +
+  geom_density (alpha = 0.4, stat = "identity", position = "identity")+
+
+  ggtitle("The distribution of gold medal won by different age group for female and male")
+```
+
+```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center"}
+silver 
+silver_plot<- ggplot(data=silver, aes(  Age,
+                                      y= Percentage,
+                                      fill= Sex)) +
+   geom_density (alpha = 0.4, stat = "identity", position = "identity")+
+  ggtitle("The distribution of silver medal won by different age group for female and male ")
+```
+
+```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center"}
+bronze
+bronze_plot<- ggplot(data=bronze, aes(x=Age,
+                                      y= Percentage,
+                                      fill= Sex)) +
+   geom_density (alpha = 0.4, stat = "identity", position = "identity")+
+  ggtitle("The distribution of bronze medal won by different age group for female and male ")
+```
+
+```{r figure2, fig.cap="The medal distribution won in different age group by sex", fig.height = 5, fig.width = 6, fig.align='center', eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+
+grid.arrange(gold_plot,silver_plot,bronze_plot, ncol=2)
+
+```
+In Figure \@ref(fig:figure2), the different medal distribution was plotted for different age and compared in against both gender of male and female.
+
+From this plot. the gold medal distribution for female and male are positively skewed with the athletes in the younger age group accounting for more of the gold medals earned than the older athletes (specifically, both female and male athletes age in early 20s have the highest percentage of the gold medal won).Similar result could be seen for silver medal distribution, both distribution for female and male athlete are positively skewed, however we can see that the age group that account the most percentage of silver medal won is ranged from 20-30 years older for both female and male athletes. In the bronze medal distribution, it shares similar distribution as silver medal as athletes age from 20 to 30 is account for the most percentage of bronze medal won for both female and male. 
+Additionally, it is seen that for all medal distribution, female athletes of younger age (0-20) tend to account for higher percentage of medal (gold, silver, and bronze) than male athletes, however by age 30 and over, male athletes exceed female athletes in medal won for gold, silver and bronze medal.  This could be due the quicker fall of physical, technical and strategics abilities of females athletes 30 and over , companied with increasing social pressure that female of an older age to be more family orientated.
+
+Hence from the above analysis, we conclude that  in general for both gender, age 20 to 30 tends to account for most proportions of the medals (gold, silver, and bronze)won, furthermore, it was found that female athletes tends to do better than male for medal wons before age20, however later was exceed by male after age 30.
+>>>>>>> Qin_Xu
 
