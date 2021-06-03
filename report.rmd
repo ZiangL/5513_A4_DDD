@@ -28,6 +28,56 @@ aa <- sport_count %>%
   arrange(desc(n)) %>% 
   top_n(5)
 
+ttt <- top1 %>% 
+  inner_join(data, top1, by="NOC") %>% 
+  filter (!is.na (Medal)) %>% 
+  filter ( Sport == "Athletics" | Sport == "Gymnastics" | Sport == "Swimming" | Sport == "Shooting" | Sport == "Cycling") %>% 
+  select (Country, Sport, Event, Medal) %>% 
+  group_by(Country, Sport, Event, Medal) %>% 
+  tally() %>% 
+  ungroup() %>% 
+  group_by(Country, Sport, Event) %>% 
+  summarise( n = sum(n)) 
+
+Athletics <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Athletics") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
+
+Cycling <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Cycling") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
+
+Gymnastics <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Gymnastics") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
+
+Shooting <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Shooting") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
+
+Swimming <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Swimming") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
 ```
 
 
