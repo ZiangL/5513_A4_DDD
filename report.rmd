@@ -30,7 +30,7 @@ sport_count<- data %>%
   top_n(10) 
 ```
 
-```{r}
+```{r wei1, fig.cap="Top 10 sports with the most athletes", fig.align='center'}
 sport_count %>% 
   mutate(Number_of_people_in_each_sport = fct_reorder(Number_of_people_in_each_sport, n)) %>% 
   ggplot(aes(x = Number_of_people_in_each_sport, 
@@ -49,6 +49,9 @@ sport_count %>%
         axis.title.x = element_text(size = 15), 
         axis.title.y = element_text(size = 15))
 ```
+
+With the Figure \@ref(fig:wei1), It illustrate the number of participants in different sports, and select the top 10 of them, according to the figure, the most popular sports is **Athletics** which is 38,624. the second is **gymnastics** and the third one is **swimming**. the fine thing about this figure is that the number of participate athletes of first 3 sport is far more than any other sports. 
+
 ```{r}
 Athletics_1 <- data %>% 
   filter(Sport == "Athletics" & Medal == "Gold")%>% 
@@ -73,7 +76,7 @@ ranking <- Athletics %>%
   ungroup()
 ```
 
-```{r}
+```{r wei2, fig.cap="In the Athletics sports, the ranking of first 5 contries about Total number of Cumulative gold MEDALS won ", fig.align='center'}
 ggp <- ggplot(ranking, 
               aes(x = rank, 
                   y = Accumu, 
