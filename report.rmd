@@ -59,12 +59,14 @@ percentage<- table1 %>%
 summarise(total_medal_by_sex =sum(total_medal_in_age_group)) %>% 
   left_join(table1, by ="Sex") %>% 
   mutate("Percentage" = ((total_medal_in_age_group/total_medal_by_sex)*100)) 
-  kable(percentage)
-  percentage 
+
+  knitr::kable (percentage ,caption = "compare the percentage of thetotal medal won by different age groups for both female and male") %>% kable_styling()
+  
 ```
 In Table \@ref(tab:table1) we compare the total medal won by different age groups for both female and male.
 
 From this table, it shows that female younger athletes age range from 15- 30 has the highest percentage (32.09%) of total medal won compared to other age group, while older female athletes age from 60 to 75 has the least percentage of medal won (8.02%). However, for males athletes, it appears that age group between (15-30),(30-45),(45-60_ share the same percentage( and highest) of total medal won, while older male athletes age form 75 to 90 again has the least percentage of medal won ( 2.52%).
+
 
 
 
