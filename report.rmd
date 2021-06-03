@@ -36,6 +36,7 @@ library(kableExtra)
 library(leaflet)
 library (scales)
 library (shiny)
+library(ggalluvial)
 ```
 
 ```{r}
@@ -43,6 +44,7 @@ data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
 
+<<<<<<< HEAD
 
 \Section*{1}
 **Medal distribution by country**
@@ -213,3 +215,115 @@ Then we focus on the athletics sports, the above Figure \@ref(fig:wei2) describe
 - The American is always number one in the ranking list except year 1980. That's because the USA did not join the sport meet in that year to boycott the former Soviet Union. 
 
 - Sometimes the bar overlapped on the x-axis, which means it shares the same ranking place in this year. 
+
+## How about the Medals of top 5 countries allocated in the events (Ziang_Li)
+
+```{r}
+top1 <- country_T %>%
+  top_n(5)
+
+aa <- sport_count %>% 
+  arrange(desc(n)) %>% 
+  top_n(5)
+
+ttt <- top1 %>% 
+  inner_join(data, top1, by="NOC") %>% 
+  filter (!is.na (Medal)) %>% 
+  filter ( Sport == "Athletics" | Sport == "Gymnastics" | Sport == "Swimming" | Sport == "Shooting" | Sport == "Cycling") %>% 
+  select (Country, Sport, Event, Medal) %>% 
+  group_by(Country, Sport, Event, Medal) %>% 
+  tally() %>% 
+  ungroup() %>% 
+  group_by(Country, Sport, Event) %>% 
+  summarise( n = sum(n)) 
+
+Athletics <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Athletics") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
+
+Cycling <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Cycling") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
+
+Gymnastics <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Gymnastics") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
+
+Shooting <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Shooting") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
+
+Swimming <- ttt %>% 
+  ungroup() %>% 
+  filter(Sport == "Swimming") %>% 
+  group_by(Event) %>% 
+  summarise( tot = sum(n)) %>% 
+  arrange(desc(tot)) %>% 
+  top_n(5)
+
+rrr <- rbind(Athletics, Cycling, Gymnastics, Shooting, Swimming) 
+
+ooo <- left_join(rrr, ttt, by="Event") 
+
+```
+
+```{r, fig.height=15, fig.width=20}
+ggplot(as.data.frame(ooo),
+       aes(y = n, axis1 = Country, axis2 = Sport, axis3 = Event)) +
+  geom_alluvium(aes(fill = Country), width = 1/40) +
+  geom_stratum(width = 1/50, fill = "white", color = "black") +
+  geom_label(stat = "stratum", aes(label = after_stat(stratum)))+
+  scale_x_discrete(limits = c("Country", "Sport", "Event"), expand = c(.05, .05)) +
+  scale_fill_brewer(type = "qual", palette = "Set3") +
+  ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
+```
+
+```{r}
+qqq <- data %>% 
+  filter(!is.na(Medal)) %>%
+  select (NOC, Year, Medal)%>% 
+  cbind (1) %>% 
+  rename( "Number" = "1") %>% 
+  select(NOC, Year, Number) 
+
+qqq <- left_join(qqq, country_T) 
+
+www <- qqq %>% 
+  select(Country, Year, Number) %>% 
+  group_by(Country, Year) %>% 
+  summarise( number = sum(Number)) %>% 
+  mutate(total = cumsum(number)) %>% 
+  filter(Country == "United States" | Country == "Germany" | Country == "United Kingdom" | Country == "France" | Country == "Italy")
+
+```
+
+```{r}
+q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
+    geom_line() +
+    geom_point() +
+    scale_color_viridis(discrete = TRUE) +
+    ggtitle("Changes in the total number of medals of the top 5 countries in the previous Olympic Games") +
+    theme_ipsum() +
+    ylab("Number of the medals") +
+    transition_reveal(Year)
+
+animate(q, nframes = 350,fps = 25,  width = 1200, height = 1000, 
+        renderer = gifski_renderer("yearly.gif"))
+```
+
