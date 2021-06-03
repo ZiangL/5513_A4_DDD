@@ -155,4 +155,22 @@ bronze_plot<- ggplot(data=bronze, aes(x=Age,
   ggtitle("The distribution of bronze medal won by different age group for female and male ")
 ```
 
+```{r figure2, fig.cap="The medal distribution won in different age group by sex", fig.height = 5, fig.width = 6, fig.align='center', eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+clean_data3 <- data %>% 
+  select (c("Sex","Age","Medal")) %>% 
+  mutate(Sex=as.factor(Sex),
+        Medal= as.factor(Medal)) %>% 
+  drop_na(Medal) %>% 
+  group_by(Sex,Age) %>% 
+  count(Medal) %>% 
+  rename("number"=n) 
+clean_data3
 
+data_plot <- ggplot(clean_data3, aes( x=Age,
+                                      y= number,
+                                      fill= Medal)) +
+  geom_histogram(stat="identity",position ="dodge") 
+  ggtitle("The distribution of medal won by different age group for female and male ")
+data_plot
+
+```
