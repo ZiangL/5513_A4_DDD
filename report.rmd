@@ -115,7 +115,19 @@ www <- qqq %>%
 
 ```
 
+```{r}
+q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
+    geom_line() +
+    geom_point() +
+    scale_color_viridis(discrete = TRUE) +
+    ggtitle("Changes in the total number of medals of the top 5 countries in the previous Olympic Games") +
+    theme_ipsum() +
+    ylab("Number of the medals") +
+    transition_reveal(Year)
 
+animate(q, nframes = 350,fps = 25,  width = 1200, height = 1000, 
+        renderer = gifski_renderer("yearly.gif"))
+```
 
 
 
