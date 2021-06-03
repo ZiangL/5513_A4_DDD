@@ -96,6 +96,24 @@ ggplot(as.data.frame(ooo),
   ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
 ```
 
+```{r}
+qqq <- data %>% 
+  filter(!is.na(Medal)) %>%
+  select (NOC, Year, Medal)%>% 
+  cbind (1) %>% 
+  rename( "Number" = "1") %>% 
+  select(NOC, Year, Number) 
+
+qqq <- left_join(qqq, country_T) 
+
+www <- qqq %>% 
+  select(Country, Year, Number) %>% 
+  group_by(Country, Year) %>% 
+  summarise( number = sum(Number)) %>% 
+  mutate(total = cumsum(number)) %>% 
+  filter(Country == "United States" | Country == "Germany" | Country == "United Kingdom" | Country == "France" | Country == "Italy")
+
+```
 
 
 
