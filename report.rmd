@@ -67,8 +67,16 @@ In Table \@ref(tab:table1) we compare the total medal won by different age group
 
 From this table, it shows that female younger athletes age range from 15- 30 has the highest percentage (32.09%) of total medal won compared to other age group, while older female athletes age from 60 to 75 has the least percentage of medal won (8.02%). However, for males athletes, it appears that age group between (15-30),(30-45),(45-60_ share the same percentage( and highest) of total medal won, while older male athletes age form 75 to 90 again has the least percentage of medal won ( 2.52%).
 
+```{r figure1, fig.cap="The percentage of total medal won in different age group by sex", fig.height = 5, fig.width = 6, fig.align='center', eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
 
-
+plot <- ggplot(data = percentage, 
+                      aes(x = age_group,
+                          y= Percentage,
+                          fill = Sex)) +
+    geom_bar(stat="identity",position ="fill") +
+    ggtitle("Total medal won by different age group for female and male ")
+plot
+```
 
 
 
