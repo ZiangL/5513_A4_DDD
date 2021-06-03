@@ -10,9 +10,19 @@ library(tidyverse)
 library(ggplot2)
 library(dplyr)
 library(readr)
+library(ggalluvial)
 ```
 
 ```{r}
 data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
+
+## How about the Medals of top 5 countries allocated in the events
+
+
+
+
+
+
+
