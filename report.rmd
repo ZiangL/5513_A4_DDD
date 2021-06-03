@@ -124,3 +124,86 @@ map
 
 The map shows the number of medals won by each country in the world at the Olympic Games, including gold, silver, bronze and total. The size of the circles on the map indicates the number of medals won, so it is easy to see that the USA has the most medals. Europe has the highest number of medals, and the density of the circles shows that most European countries have won medals and have accumulated a significant number of medals in total.
 
+
+
+
+
+# Section 2. Find out which sport has the largest number of participants and study the distribution of gold MEDALS in different countries over time
+
+```{r}
+sport_count<- data %>% 
+  mutate(Number_of_people_in_each_sport = Sport) %>% 
+  count(Number_of_people_in_each_sport) %>% 
+  top_n(10) 
+```
+
+```{r wei1, fig.cap="Top 10 sports with the most athletes", fig.align='center'}
+sport_count %>% 
+  mutate(Number_of_people_in_each_sport = fct_reorder(Number_of_people_in_each_sport, n)) %>% 
+  ggplot(aes(x = Number_of_people_in_each_sport, 
+             y = n, 
+             fill = Number_of_people_in_each_sport)) + 
+  coord_flip() + 
+  geom_text(aes(x = Number_of_people_in_each_sport,  
+                y = n + 4000,
+                label = n)) + 
+  geom_col() + 
+  xlab("Sport") +
+  ylab("Number of people in each sport") + 
+  theme(strip.text = element_text(size = 10), 
+        axis.text = element_text(size = 10), 
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 0.15),
+        axis.title.x = element_text(size = 15), 
+        axis.title.y = element_text(size = 15))
+```
+
+With the Figure \@ref(fig:wei1), It illustrate the number of participants in different sports, and select the top 10 of them, according to the figure, the most popular sports is **Athletics** which is 38,624. the second is **gymnastics** and the third one is **swimming**. the fine thing about this figure is that the number of participate athletes of first 3 sport is far more than any other sports. 
+
+```{r}
+Athletics_1 <- data %>% 
+  filter(Sport == "Athletics" & Medal == "Gold")%>% 
+  select(Sport, NOC, Medal, Year) %>% 
+  cbind(1) %>% 
+  rename("Number" = "1") %>% 
+  group_by(NOC, Year) %>%
+  summarise(Total = sum(Number)) %>% 
+  mutate(Accumu = cumsum(Total)) 
+
+Athletics <- inner_join(Athletics_1, country_T, by="NOC")
+```
+
+```{r}
+ranking <- Athletics %>%
+  group_by(Year) %>%
+  mutate(rank = rank(-Accumu),
+         Accumu_rel = Accumu/Accumu[rank==1],
+         Accumu_lbl = paste0(" ",round(Accumu/1e9))) %>%
+  group_by(Country) %>% 
+  filter(rank <=5) %>%
+  ungroup()
+```
+
+```{r wei2, fig.cap="In the Athletics sports, the ranking of first 5 contries about Total number of Cumulative gold MEDALS won ", fig.align='center'}
+ggp <- ggplot(ranking, 
+              aes(x = rank, 
+                  y = Accumu, 
+                  group = Country)) +
+  geom_bar(stat = "identity", 
+           aes(fill = Country)) +
+  transition_states(Year, transition_length = 2, state_length = 0) + 
+  ease_aes('quadratic-in-out') +  
+  enter_drift(x_mod = -1) + exit_drift(x_mod = 1) +
+  labs(x = "Ranking of the gold medal accumulated",
+       y = "Accumulated Number of gold medal",
+       title = "Year {closest_state}")
+
+animate(ggp, 200, fps = 20,  width = 1200, height = 1000, 
+        renderer = gifski_renderer("gganim.gif"))
+```
+
+Then we focuse on the athletics sports, the above Figure \@ref(fig:wei2) describes only in the Athletics sports, it shows number of Cumulative gold MEDALS won in each country and ranking them. The x-axis is about first 5 ranking, the y-axis is about the Accumulated Number of gold medal, and the different color means different countries, so there are 2 interesting finding in this GIF, 
+
+- The American is always number one in the ranking list except year 1980. That's because the USA did not join the sport meet in that year to boycott the former Soviet Union. 
+
+- Sometimes the bar overlapped on the x-axis, which means it shares the same ranking place in this year. 
+>>>>>>> Juntong_Wei
