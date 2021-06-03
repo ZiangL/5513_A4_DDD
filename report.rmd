@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE)
 ```
 
-```{r setup, include=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
@@ -41,18 +41,15 @@ library(grid)
 library(gridExtra)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
 
-
-
-
 \Section*{1}
 **Medal distribution by country**
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 medal <- data %>%
   filter(!is.na(Medal))
 
@@ -63,7 +60,7 @@ team<- medal %>%
             Bronze = sum (Medal == "Bronze"))
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 team_M <- team %>%
   pivot_longer(!"NOC", names_to = "medals", values_to = "number_of_medals")
 
@@ -73,7 +70,7 @@ country_M <- data_frame(country_M, team_M)
 country_M<- na.omit(country_M)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 team_T <- cbind(team, c(rowSums(team [, 2:4], na.rm = TRUE))) 
 colnames(team_T)[5] <- "Total"
 
@@ -92,17 +89,17 @@ country_T_10 <- country_T%>%
 knitr::kable(country_T_10, caption = "The medals in different country", col.names = c("Country",  "NOC", "Gold", "Silver", "Bronze", "Total"))
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 ct <- inner_join(country_T, dat1, by = "Country")
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 world <- map_data("world")
 visit.x<-ct$Longitude
 visit.y<-ct$Latitude
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 hex_codes <- hue_pal(h=c(180,270)) (length(ct$Country)) 
 pal <- colorFactor(hex_codes, domain = ct$Country)
 
@@ -142,14 +139,14 @@ The map shows the number of medals won by each country in the world at the Olymp
 \Section*{2}
 **Find out which sport has the largest number of participants and study the distribution of gold MEDALS in different countries over time**
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 sport_count<- data %>% 
   mutate(Number_of_people_in_each_sport = Sport) %>% 
   count(Number_of_people_in_each_sport) %>% 
   top_n(10) 
 ```
 
-```{r wei1, fig.cap="Top 10 sports with the most athletes", fig.align='center'}
+```{r wei1, fig.cap="Top 10 sports with the most athletes", fig.align='center', message=FALSE, warning=FALSE}
 sport_count %>% 
   mutate(Number_of_people_in_each_sport = fct_reorder(Number_of_people_in_each_sport, n)) %>% 
   ggplot(aes(x = Number_of_people_in_each_sport, 
@@ -171,7 +168,7 @@ sport_count %>%
 
 With the Figure \@ref(fig:wei1), It illustrate the number of participants in different sports, and select the top 10 of them, according to the figure, the most popular sports is **Athletics** which is 38,624. the second is **gymnastics** and the third one is **swimming**. the fine thing about this figure is that the number of participate athletes of first 3 sport is far more than any other sports. 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 Athletics_1 <- data %>% 
   filter(Sport == "Athletics" & Medal == "Gold")%>% 
   select(Sport, NOC, Medal, Year) %>% 
@@ -184,7 +181,7 @@ Athletics_1 <- data %>%
 Athletics <- inner_join(Athletics_1, country_T, by="NOC")
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 ranking <- Athletics %>%
   group_by(Year) %>%
   mutate(rank = rank(-Accumu),
@@ -195,7 +192,7 @@ ranking <- Athletics %>%
   ungroup()
 ```
 
-```{r wei2, fig.cap="In the Athletics sports, the ranking of first 5 contries about Total number of Cumulative gold MEDALS won ", fig.align='center'}
+```{r wei2, fig.cap="In the Athletics sports, the ranking of first 5 contries about Total number of Cumulative gold MEDALS won ", fig.align='center', message=FALSE, warning=FALSE}
 ggp <- ggplot(ranking, 
               aes(x = rank, 
                   y = Accumu, 
@@ -219,9 +216,10 @@ Then we focus on the athletics sports, the above Figure \@ref(fig:wei2) describe
 
 - Sometimes the bar overlapped on the x-axis, which means it shares the same ranking place in this year. 
 
-## How about the Medals of top 5 countries allocated in the events (Ziang_Li)
+\Section*{3}
+**How about the Medals of top 5 countries allocated in the events (Ziang_Li)**
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 top1 <- country_T %>%
   top_n(5)
 
@@ -286,7 +284,7 @@ ooo <- left_join(rrr, ttt, by="Event")
 
 ```
 
-```{r, fig.height=15, fig.width=20}
+```{r, fig.height=15, fig.width=20, message=FALSE, warning=FALSE}
 ggplot(as.data.frame(ooo),
        aes(y = n, axis1 = Country, axis2 = Sport, axis3 = Event)) +
   geom_alluvium(aes(fill = Country), width = 1/40) +
@@ -297,7 +295,7 @@ ggplot(as.data.frame(ooo),
   ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 qqq <- data %>% 
   filter(!is.na(Medal)) %>%
   select (NOC, Year, Medal)%>% 
@@ -316,7 +314,7 @@ www <- qqq %>%
 
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
     geom_line() +
     geom_point() +
@@ -329,16 +327,14 @@ q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
 animate(q, nframes = 350,fps = 25,  width = 1200, height = 1000, 
         renderer = gifski_renderer("yearly.gif"))
 ```
-=======
-#Introduction 
 
 \section*{Comparing Olympic medals result for athletes of different age by gender}
 ## First question: Compare the total medal won by different age for both female and male.
-```{r data}
+```{r data, message=FALSE, warning=FALSE}
 data<- read.csv("Data/athlete_events.csv")
 ```
 
-```{r data_wrangling1}
+```{r data_wrangling1, message=FALSE, warning=FALSE}
 clean_data <- data %>% 
   select (c("Sex","Age","Medal")) %>% 
   mutate(Sex=as.factor(Sex),
@@ -358,7 +354,7 @@ select(-Age) %>%
 clean_data1
 ```
 
-```{r data_wrangling3}
+```{r data_wrangling3, message=FALSE, warning=FALSE}
 table1<- clean_data1 %>% 
     group_by (Sex,age_group) %>% 
   summarise(total_medal_in_age_group= sum(number))
@@ -398,7 +394,7 @@ In Figure \@ref(fig:figure1), we have plotted the percentage of the total medal 
 
 ##Second question: Comparison of different medal distribution between age group by gender. 
 
-```{r table2}
+```{r table2, message=FALSE, warning=FALSE}
 clean_data2 <- data %>% 
   select (c("Sex","Age","Medal")) %>% 
   mutate(Sex=as.factor(Sex),
@@ -419,7 +415,7 @@ gold<- clean_data2 %>%
   mutate("Percentage" = ((number/total_silver_medal)*100)) 
 ```
 
-```{r table3}
+```{r table3, message=FALSE, warning=FALSE}
 silver1<- clean_data2 %>% 
   filter(Medal== "Silver") %>% 
   group_by(Sex) %>% 
@@ -430,7 +426,7 @@ silver<- clean_data2 %>%
   mutate("Percentage" = ((number/total_silver_medal)*100)) 
 ```
 
-```{r table4}
+```{r table4, message=FALSE, warning=FALSE}
 bronze1<- clean_data2 %>% 
   filter(Medal== "Bronze") %>% 
   group_by(Sex) %>% 
@@ -441,7 +437,7 @@ bronze<- clean_data2 %>%
   mutate("Percentage" = ((number/total_bronze_medal)*100)) 
 ```
 
-```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center", eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
 gold
 gold_plot<- ggplot(data=gold, aes(  x= Age,
                                       y= Percentage,
@@ -451,7 +447,7 @@ gold_plot<- ggplot(data=gold, aes(  x= Age,
   ggtitle("The distribution of gold medal won by different age group for female and male")
 ```
 
-```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center"}
+```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
 silver 
 silver_plot<- ggplot(data=silver, aes(  Age,
                                       y= Percentage,
@@ -460,7 +456,7 @@ silver_plot<- ggplot(data=silver, aes(  Age,
   ggtitle("The distribution of silver medal won by different age group for female and male ")
 ```
 
-```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center"}
+```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
 bronze
 bronze_plot<- ggplot(data=bronze, aes(x=Age,
                                       y= Percentage,
@@ -469,7 +465,7 @@ bronze_plot<- ggplot(data=bronze, aes(x=Age,
   ggtitle("The distribution of bronze medal won by different age group for female and male ")
 ```
 
-```{r figure2, fig.cap="The medal distribution won in different age group by sex", fig.height = 5, fig.width = 6, fig.align='center', eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+```{r figure2, fig.cap="The medal distribution won in different age group by sex", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
 
 grid.arrange(gold_plot,silver_plot,bronze_plot, ncol=2)
 
