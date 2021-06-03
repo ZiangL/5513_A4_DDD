@@ -78,7 +78,7 @@ plot <- ggplot(data = percentage,
 plot
 ```
 
-
+In Figure \@ref(fig:figure1), we have plotted the percentage of the total medal won by different age group and compared in against both gender of male and female.
 
 
 
