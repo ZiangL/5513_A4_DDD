@@ -82,5 +82,6 @@ In Figure \@ref(fig:figure1), we have plotted the percentage of the total medal 
 
 \@ref(fig:figure1),  depicts that for the age groups aged (0-15),(15-30),and (30-45), female athletes is accounted of  a higher proportion  of the total medal compared to males, However by the age group (45 to 60), males athletes exceed female athletes in the proportion of  total medal won and continues to have a higher proportion than female in the older age bracket. 
 
+##Second question: Comparison of different medal distribution between age group by gender. 
 
 
