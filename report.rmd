@@ -98,7 +98,6 @@ ggplot(as.data.frame(ooo),
 ```
 
 
-
 ```{r}
 qqq <- data %>% 
   filter(!is.na(Medal)) %>%
