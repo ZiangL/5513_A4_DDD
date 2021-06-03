@@ -16,3 +16,25 @@ library(readr)
 data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
+#Introduction 
+
+\section*{Comparing Olympic medals result for athletes of different age by gender}
+## First question: Compare the total medal won by different age for both female and male.
+```{r data}
+data<- read.csv("Data/athlete_events.csv")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
