@@ -94,7 +94,8 @@ animate(ggp, 200, fps = 20,  width = 1200, height = 1000,
         renderer = gifski_renderer("gganim.gif"))
 ```
 
+Then we focuse on the athletics sports, the above Figure \@ref(fig:wei2) describes only in the Athletics sports, it shows number of Cumulative gold MEDALS won in each country and ranking them. The x-axis is about first 5 ranking, the y-axis is about the Accumulated Number of gold medal, and the different color means different countries, so there are 2 interesting finding in this GIF, 
 
+- The American is always number one in the ranking list except year 1980. That's because the USA did not join the sport meet in that year to boycott the former Soviet Union. 
 
-
-
+- Sometimes the bar overlapped on the x-axis, which means it shares the same ranking place in this year. 
