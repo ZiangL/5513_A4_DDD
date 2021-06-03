@@ -85,16 +85,6 @@ ooo <- left_join(rrr, ttt, by="Event")
 
 ```
 
-```{r, fig.height=15, fig.width=20}
-ggplot(as.data.frame(ooo),
-       aes(y = n, axis1 = Country, axis2 = Sport, axis3 = Event)) +
-  geom_alluvium(aes(fill = Country), width = 1/40) +
-  geom_stratum(width = 1/50, fill = "white", color = "black") +
-  geom_label(stat = "stratum", aes(label = after_stat(stratum)))+
-  scale_x_discrete(limits = c("Country", "Sport", "Event"), expand = c(.05, .05)) +
-  scale_fill_brewer(type = "qual", palette = "Set3") +
-  ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
-```
 
 ```{r}
 qqq <- data %>% 
