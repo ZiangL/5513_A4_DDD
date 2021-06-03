@@ -25,7 +25,6 @@ library(maps)
 library(sp)
 library(maptools)
 library(readr)
-<<<<<<< HEAD
 library(ggraph)
 library(igraph)
 library(RColorBrewer)
@@ -38,17 +37,15 @@ library(leaflet)
 library (scales)
 library (shiny)
 library(ggalluvial)
-=======
 library(grid)
 library(gridExtra)
->>>>>>> Qin_Xu
 ```
 
 ```{r}
 data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
-<<<<<<< HEAD
+
 
 
 
@@ -483,5 +480,10 @@ From this plot. the gold medal distribution for female and male are positively s
 Additionally, it is seen that for all medal distribution, female athletes of younger age (0-20) tend to account for higher percentage of medal (gold, silver, and bronze) than male athletes, however by age 30 and over, male athletes exceed female athletes in medal won for gold, silver and bronze medal.  This could be due the quicker fall of physical, technical and strategics abilities of females athletes 30 and over , companied with increasing social pressure that female of an older age to be more family orientated.
 
 Hence from the above analysis, we conclude that  in general for both gender, age 20 to 30 tends to account for most proportions of the medals (gold, silver, and bronze)won, furthermore, it was found that female athletes tends to do better than male for medal wons before age20, however later was exceed by male after age 30.
->>>>>>> Qin_Xu
+
+# Conclusion  
+
+In summary, from the presentation today, we conclude that for quesiton1 when comparing the distribution of medal in different country aound the world, America appears to have the most medals in the world. In addtional, for question two, we have found that the sport athletics have the largest number of athletics, and in this sports, The United States accumulated the most gold MEDALS in each year. 
+Furthermore for question three, we conclude that The United States has an absolute advantage in swimming events,The medals of United Kingdom are more distributed in Cycling. and that the Medals from other countries are very evenly distributed among the five events
+lastly. when comparing the medals won for different age group by gender, it was revealed that in general for both gender, age bracket from 20-40 and 40 to 60 in general has the most proporiton of medal won compared to other age group for gold, silver and bronze medal won. 
 
