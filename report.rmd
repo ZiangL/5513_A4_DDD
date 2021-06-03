@@ -85,7 +85,6 @@ ooo <- left_join(rrr, ttt, by="Event")
 
 ```
 
-```{r}
 ```{r, fig.height=15, fig.width=20}
 ggplot(as.data.frame(ooo),
        aes(y = n, axis1 = Country, axis2 = Sport, axis3 = Event)) +
@@ -96,7 +95,6 @@ ggplot(as.data.frame(ooo),
   scale_fill_brewer(type = "qual", palette = "Set3") +
   ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
 ```
-
 
 ```{r}
 qqq <- data %>% 
