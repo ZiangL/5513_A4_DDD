@@ -84,4 +84,75 @@ In Figure \@ref(fig:figure1), we have plotted the percentage of the total medal 
 
 ##Second question: Comparison of different medal distribution between age group by gender. 
 
+```{r table2}
+clean_data2 <- data %>% 
+  select (c("Sex","Age","Medal")) %>% 
+  mutate(Sex=as.factor(Sex),
+        Medal= as.factor(Medal)) %>% 
+  group_by(Sex,Age) %>% 
+  count(Medal) %>% 
+  rename("number"=n) 
+  clean_data2 
+
+
+gold1<- clean_data2 %>% 
+  filter(Medal== "Gold") %>% 
+  group_by(Sex) %>% 
+  summarise(total_silver_medal=sum(number)) 
+gold<- clean_data2 %>% 
+  filter(Medal== "Gold") %>% 
+  left_join(gold1 ,by = "Sex") %>% 
+  mutate("Percentage" = ((number/total_silver_medal)*100)) 
+```
+
+```{r table3}
+silver1<- clean_data2 %>% 
+  filter(Medal== "Silver") %>% 
+  group_by(Sex) %>% 
+  summarise(total_silver_medal=sum(number)) 
+silver<- clean_data2 %>% 
+  filter(Medal== "Silver") %>% 
+  left_join(silver1 ,by = "Sex") %>% 
+  mutate("Percentage" = ((number/total_silver_medal)*100)) 
+```
+
+```{r table4}
+bronze1<- clean_data2 %>% 
+  filter(Medal== "Bronze") %>% 
+  group_by(Sex) %>% 
+  summarise(total_bronze_medal=sum(number)) 
+bronze<- clean_data2 %>% 
+  filter(Medal== "Bronze") %>% 
+  left_join(bronze1 ,by = "Sex") %>% 
+  mutate("Percentage" = ((number/total_bronze_medal)*100)) 
+```
+
+```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center", eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+gold
+gold_plot<- ggplot(data=gold, aes(  x= Age,
+                                      y= Percentage,
+                                      fill= Sex)) +
+  geom_density (alpha = 0.4, stat = "identity", position = "identity")+
+
+  ggtitle("The distribution of gold medal won by different age group for female and male")
+```
+
+```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center"}
+silver 
+silver_plot<- ggplot(data=silver, aes(  Age,
+                                      y= Percentage,
+                                      fill= Sex)) +
+   geom_density (alpha = 0.4, stat = "identity", position = "identity")
+  ggtitle("The distribution of silver medal won by different age group for female and male ")
+```
+
+```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center"}
+bronze
+bronze_plot<- ggplot(data=bronze, aes(x=Age,
+                                      y= Percentage,
+                                      fill= Sex)) +
+   geom_density (alpha = 0.4, stat = "identity", position = "identity")+
+  ggtitle("The distribution of bronze medal won by different age group for female and male ")
+```
+
 
