@@ -30,3 +30,68 @@ sport_count<- data %>%
   top_n(10) 
 ```
 
+```{r}
+sport_count %>% 
+  mutate(Number_of_people_in_each_sport = fct_reorder(Number_of_people_in_each_sport, n)) %>% 
+  ggplot(aes(x = Number_of_people_in_each_sport, 
+             y = n, 
+             fill = Number_of_people_in_each_sport)) + 
+  coord_flip() + 
+  geom_text(aes(x = Number_of_people_in_each_sport,  
+                y = n + 4000,
+                label = n)) + 
+  geom_col() + 
+  xlab("Sport") +
+  ylab("Number of people in each sport") + 
+  theme(strip.text = element_text(size = 10), 
+        axis.text = element_text(size = 10), 
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 0.15),
+        axis.title.x = element_text(size = 15), 
+        axis.title.y = element_text(size = 15))
+```
+```{r}
+Athletics_1 <- data %>% 
+  filter(Sport == "Athletics" & Medal == "Gold")%>% 
+  select(Sport, NOC, Medal, Year) %>% 
+  cbind(1) %>% 
+  rename("Number" = "1") %>% 
+  group_by(NOC, Year) %>%
+  summarise(Total = sum(Number)) %>% 
+  mutate(Accumu = cumsum(Total)) 
+
+Athletics <- inner_join(Athletics_1, country_T, by="NOC")
+```
+
+```{r}
+ranking <- Athletics %>%
+  group_by(Year) %>%
+  mutate(rank = rank(-Accumu),
+         Accumu_rel = Accumu/Accumu[rank==1],
+         Accumu_lbl = paste0(" ",round(Accumu/1e9))) %>%
+  group_by(Country) %>% 
+  filter(rank <=5) %>%
+  ungroup()
+```
+
+```{r}
+ggp <- ggplot(ranking, 
+              aes(x = rank, 
+                  y = Accumu, 
+                  group = Country)) +
+  geom_bar(stat = "identity", 
+           aes(fill = Country)) +
+  transition_states(Year, transition_length = 2, state_length = 0) + 
+  ease_aes('quadratic-in-out') +  
+  enter_drift(x_mod = -1) + exit_drift(x_mod = 1) +
+  labs(x = "Ranking of the gold medal accumulated",
+       y = "Accumulated Number of gold medal",
+       title = "Year {closest_state}")
+
+animate(ggp, 200, fps = 20,  width = 1200, height = 1000, 
+        renderer = gifski_renderer("gganim.gif"))
+```
+
+
+
+
+
