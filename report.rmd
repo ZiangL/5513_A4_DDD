@@ -282,17 +282,6 @@ ooo <- left_join(rrr, ttt, by="Event")
 
 ```
 
-```{r, fig.height=15, fig.width=20, message=FALSE, warning=FALSE}
-ggplot(as.data.frame(ooo),
-       aes(y = n, axis1 = Country, axis2 = Sport, axis3 = Event)) +
-  geom_alluvium(aes(fill = Country), width = 1/40) +
-  geom_stratum(width = 1/50, fill = "white", color = "black") +
-  geom_label(stat = "stratum", aes(label = after_stat(stratum)))+
-  scale_x_discrete(limits = c("Country", "Sport", "Event"), expand = c(.05, .05)) +
-  scale_fill_brewer(type = "qual", palette = "Set3") +
-  ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
-```
-
 ```{r, message=FALSE, warning=FALSE}
 qqq <- data %>% 
   filter(!is.na(Medal)) %>%
@@ -324,6 +313,17 @@ q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
 
 animate(q, nframes = 350,fps = 25,  width = 1200, height = 1000, 
         renderer = gifski_renderer("yearly.gif"))
+```
+
+```{r, fig.height=15, fig.width=20, message=FALSE, warning=FALSE}
+ggplot(as.data.frame(ooo),
+       aes(y = n, axis1 = Country, axis2 = Sport, axis3 = Event)) +
+  geom_alluvium(aes(fill = Country), width = 1/40) +
+  geom_stratum(width = 1/50, fill = "white", color = "black") +
+  geom_label(stat = "stratum", aes(label = after_stat(stratum)))+
+  scale_x_discrete(limits = c("Country", "Sport", "Event"), expand = c(.05, .05)) +
+  scale_fill_brewer(type = "qual", palette = "Set3") +
+  ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
 ```
 
 \section*{Comparing Olympic medals result for athletes of different age by gender}
