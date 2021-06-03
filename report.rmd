@@ -83,3 +83,44 @@ knitr::kable(country_T_10, caption = "The medals in different country", col.name
 ct <- inner_join(country_T, dat1, by = "Country")
 ```
 
+```{r}
+world <- map_data("world")
+visit.x<-ct$Longitude
+visit.y<-ct$Latitude
+```
+
+```{r}
+hex_codes <- hue_pal(h=c(180,270)) (length(ct$Country)) 
+pal <- colorFactor(hex_codes, domain = ct$Country)
+
+mytext <- paste(
+   "Country: ", ct$Country, 
+   "Total: ", ct$Total, 
+   "Gold: ", ct$Gold,
+   "Silver: ", ct$Silver,
+   "Bronze: ", ct$Bronze) %>%
+  lapply(htmltools::HTML)
+
+map <- leaflet(ct) %>% 
+  addTiles() %>%
+  addCircles(
+    lng = ~Longitude,
+    lat = ~Latitude,
+    radius = ~Total*300,
+    stroke = F,
+    fillOpacity = 0.4,
+    color = ~pal(Country),
+    label = mytext
+  ) %>%
+  addLegend ("topright", 
+             pal=pal, 
+             values = ~Country,
+             title = "Country",
+             opacity = 1
+  )
+
+map
+```
+
+
+
