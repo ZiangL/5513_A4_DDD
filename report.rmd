@@ -78,6 +78,11 @@ Swimming <- ttt %>%
   summarise( tot = sum(n)) %>% 
   arrange(desc(tot)) %>% 
   top_n(5)
+
+rrr <- rbind(Athletics, Cycling, Gymnastics, Shooting, Swimming) 
+
+ooo <- left_join(rrr, ttt, by="Event") 
+
 ```
 
 
