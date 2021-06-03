@@ -16,3 +16,17 @@ library(readr)
 data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
+
+
+
+
+
+# Section 2. Find out which sport has the largest number of participants and study the distribution of gold MEDALS in different countries over time
+
+```{r}
+sport_count<- data %>% 
+  mutate(Number_of_people_in_each_sport = Sport) %>% 
+  count(Number_of_people_in_each_sport) %>% 
+  top_n(10) 
+```
+
