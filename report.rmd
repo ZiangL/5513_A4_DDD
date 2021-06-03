@@ -37,6 +37,7 @@ data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
 
+<<<<<<< HEAD
 #Section 1: Medal distribution by country
 
 ```{r}
@@ -124,6 +125,7 @@ map
 
 The map shows the number of medals won by each country in the world at the Olympic Games, including gold, silver, bronze and total. The size of the circles on the map indicates the number of medals won, so it is easy to see that the USA has the most medals. Europe has the highest number of medals, and the density of the circles shows that most European countries have won medals and have accumulated a significant number of medals in total.
 
+=======
 
 
 
@@ -206,4 +208,3 @@ Then we focuse on the athletics sports, the above Figure \@ref(fig:wei2) describ
 - The American is always number one in the ranking list except year 1980. That's because the USA did not join the sport meet in that year to boycott the former Soviet Union. 
 
 - Sometimes the bar overlapped on the x-axis, which means it shares the same ranking place in this year. 
->>>>>>> Juntong_Wei
