@@ -6,6 +6,12 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      messages = FALSE, 
+                      warning = FALSE)
+```
+
+```{r setup, include=FALSE}
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
@@ -37,8 +43,9 @@ data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
 
-<<<<<<< HEAD
-#Section 1: Medal distribution by country
+
+\Section*{1}
+**Medal distribution by country**
 
 ```{r}
 medal <- data %>%
@@ -125,12 +132,10 @@ map
 
 The map shows the number of medals won by each country in the world at the Olympic Games, including gold, silver, bronze and total. The size of the circles on the map indicates the number of medals won, so it is easy to see that the USA has the most medals. Europe has the highest number of medals, and the density of the circles shows that most European countries have won medals and have accumulated a significant number of medals in total.
 
-=======
 
 
-
-
-# Section 2. Find out which sport has the largest number of participants and study the distribution of gold MEDALS in different countries over time
+\Section*{2}
+**Find out which sport has the largest number of participants and study the distribution of gold MEDALS in different countries over time**
 
 ```{r}
 sport_count<- data %>% 
@@ -203,7 +208,7 @@ animate(ggp, 200, fps = 20,  width = 1200, height = 1000,
         renderer = gifski_renderer("gganim.gif"))
 ```
 
-Then we focuse on the athletics sports, the above Figure \@ref(fig:wei2) describes only in the Athletics sports, it shows number of Cumulative gold MEDALS won in each country and ranking them. The x-axis is about first 5 ranking, the y-axis is about the Accumulated Number of gold medal, and the different color means different countries, so there are 2 interesting finding in this GIF, 
+Then we focus on the athletics sports, the above Figure \@ref(fig:wei2) describes only in the Athletics sports, it shows number of Cumulative gold MEDALS won in each country and ranking them. The x-axis is about first 5 ranking, the y-axis is about the Accumulated Number of gold medal, and the different color means different countries, so there are 2 interesting finding in this GIF, 
 
 - The American is always number one in the ranking list except year 1980. That's because the USA did not join the sport meet in that year to boycott the former Soviet Union. 
 
