@@ -37,6 +37,10 @@ data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
 
+Introduction
+This report looks at the data from previous Olympic Games and finds some interesting points. It focuses on the number of medals, the age of the athletes, the gender, the country and the relationship between them. It focuses on the distribution and number of medals, the ranking of countries in terms of the number of medals won, the number of Olympic sports and the relationship between gender, age and medals won.
+
+
 #Section 1: Medal distribution by country
 
 ```{r}
@@ -89,7 +93,7 @@ visit.x<-ct$Longitude
 visit.y<-ct$Latitude
 ```
 
-```{r}
+```{r fig-map, fig.cap="Number of total medals by countries", fig.align='center'}
 hex_codes <- hue_pal(h=c(180,270)) (length(ct$Country)) 
 pal <- colorFactor(hex_codes, domain = ct$Country)
 
@@ -122,5 +126,9 @@ map <- leaflet(ct) %>%
 map
 ```
 
-The map shows the number of medals won by each country in the world at the Olympic Games, including gold, silver, bronze and total. The size of the circles on the map indicates the number of medals won, so it is easy to see that the USA has the most medals. Europe has the highest number of medals, and the density of the circles shows that most European countries have won medals and have accumulated a significant number of medals in total.
+The map \@ref(fig:fig-map) shows the number of medals won by each country in the world at the Olympic Games, including gold, silver, bronze and total. The size of the circles on the map indicates the number of medals won, so it is easy to see that the USA has the most medals. Europe has the highest number of medals, and the density of the circles shows that most European countries have won medals and have accumulated a significant number of medals in total.
+
+
+
+
 
