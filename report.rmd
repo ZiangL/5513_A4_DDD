@@ -2,17 +2,14 @@
 title: "Assignment 4"
 author: "Juntong Wei, Qin Xu, Xuanming Liang, Ziang Li"
 date: "`r Sys.Date()`"
-bibliography: references.bib
-biblio-style: authoryear-comp
 linestretch: 1.5
-output:
-  bookdown::html_document2:
+output: 
+  bookdown::html_document2: 
     fig_caption: yes
     fig_height: 5
     fig_width: 8
     keep_tex: yes
     number_sections: yes
-    citation_package: biblatex
     toc: false
 ---
 
@@ -20,12 +17,9 @@ output:
 knitr::opts_chunk$set(echo = FALSE, 
                       messages = FALSE, 
                       warning = FALSE)
+```
 
-<<<<<<< HEAD
-
-=======
 ```{r, message=FALSE, warning=FALSE}
->>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
@@ -51,6 +45,7 @@ library(leaflet)
 library(scales)
 library(grid)
 library(gridExtra)
+library(bookdown)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
@@ -58,12 +53,13 @@ data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
 
-#Introduction
+# Introduction
 
-This report looks at the data from previous Olympic Games and finds some interesting points. It focuses on the number of medals, the age of the athletes, the gender, the country and the relationship between them. It focuses on the distribution and number of medals, the ranking of countries in terms of the number of medals won, the number of Olympic sports and the relationship between gender, age and medals won.
+This report looks at the data from previous Olympic Games and finds some interesting points. It focuses on the number of medals, the age of the athletes, the gender, the country and the relationship between them. It focuses on the distribution and number of medals, the ranking of countries in terms of the number of medals won, the number of Olympic sports and the relationship between gender, age and medals won. In this report, we use two datasets, named "data" and "dat1". In "data" has 271,116 obs. and 15 variables. In "dat1" has 184 obs. And five variables. In "dat1", we mainly use to replace the country code (NOC) with the name of the country, so we use the variables "NOC" and "Country". In "data" is the main dataset we use, we use "sex", "age", "NOC", "Year", "sport", "event" and "medal" these seven variables, and the variables used them in four parts of the study.
 
-\Section*{1}
-**Medal distribution by country**
+# Analysis
+
+## Medal distribution by country (Xuanming_Liang)
 
 ```{r, message=FALSE, warning=FALSE}
 medal <- data %>%
@@ -114,7 +110,8 @@ world <- map_data("world")
 visit.x<-ct$Longitude
 visit.y<-ct$Latitude
 ```
-```{r, message=FALSE, warning=FALSE}
+
+```{r map, fig.cap="Medals distribution in the world wide", message=FALSE, warning=FALSE}
 hex_codes <- hue_pal(h=c(180,270)) (length(ct$Country)) 
 pal <- colorFactor(hex_codes, domain = ct$Country)
 
@@ -136,23 +133,14 @@ map <- leaflet(ct) %>%
     fillOpacity = 0.4,
     color = ~pal(Country),
     label = mytext
-  ) %>%
-  addLegend ("topright", 
-             pal=pal, 
-             values = ~Country,
-             title = "Country",
-             opacity = 1
-  )
-
+  ) 
 map
 ```
 
-The map shows the number of medals won by each country in the world at the Olympic Games, including gold, silver, bronze and total. The size of the circles on the map indicates the number of medals won, so it is easy to see that the USA has the most medals. Europe has the highest number of medals, and the density of the circles shows that most European countries have won medals and have accumulated a significant number of medals in total.
+The map \@ref(fig:map) shows the number of medals won by each country in the world at the Olympic Games, including gold, silver, bronze and total. The size of the circles on the map indicates the number of medals won, so it is easy to see that the USA has the most medals. Europe has the highest number of medals, and the density of the circles shows that most European countries have won medals and have accumulated a significant number of medals in total.
 
 
-
-\Section*{2}
-**Find out which sport has the largest number of participants and study the distribution of gold MEDALS in different countries over time**
+## Find out which sport has the largest number of participants and study the distribution of gold MEDALS in different countries over time (Juntong_Wei)
 
 ```{r, message=FALSE, warning=FALSE}
 sport_count<- data %>% 
@@ -231,14 +219,14 @@ Then we focus on the athletics sports, the above Figure \@ref(fig:wei2) describe
 
 - Sometimes the bar overlapped on the x-axis, which means it shares the same ranking place in this year. 
 
-\Section*{3}
-**How about the Medals of top 5 countries allocated in the events (Ziang_Li)**
+
+## How about the Medals of top 5 countries allocated in the events (Ziang_Li)
 
 In the section 1, we discussed the number of medals each country has won in the previous Olympic Games. In section2, we analyzed the sports with the largest number of athletes participate in. Hence, in section3, we will compare the five countries with the most medals and the distribution of medals in the five events with the largest number of participants.
 
-From the figure, it clearly shows that the Medals changing of the Top5 countries in previous Olympic Games.  The United States has consistently ranked first in the total number of medals. After 1990, the number of medals in Germany has increased rapidly. And in 1998, Germany ranked second in the total number of medals.
+From the figure \@ref(fig:LI1), it clearly shows that the Medals changing of the Top5 countries in previous Olympic Games.  The United States has consistently ranked first in the total number of medals. After 1990, the number of medals in Germany has increased rapidly. And in 1998, Germany ranked second in the total number of medals.
 
-From the figure, it shows the distribution of the top5 countries medals among the 5 sports with the most participants. The number of medals in the United States is larger than the other four countries and The United States has an absolute advantage in swimming events, especially in the relay race events. The medals of United Kingdom are more distributed in Cycling. In addition, the medals from other countries are very evenly distributed among the five events
+From the figure \@ref(fig:LI2), it shows the distribution of the top5 countries medals among the 5 sports with the most participants. The number of medals in the United States is larger than the other four countries and The United States has an absolute advantage in swimming events, especially in the relay race events. The medals of United Kingdom are more distributed in Cycling. In addition, the medals from other countries are very evenly distributed among the five events
 
 ```{r, message=FALSE, warning=FALSE}
 top1 <- country_T %>%
@@ -324,7 +312,7 @@ www <- qqq %>%
 
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r LI1,fig.cap="Changes in the total number of medals of the top 5 countries in the previous Olympic Games", message=FALSE, warning=FALSE}
 q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
     geom_line() +
     geom_point() +
@@ -337,10 +325,8 @@ q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
 animate(q, nframes = 350,fps = 25,  width = 1200, height = 1000, 
         renderer = gifski_renderer("yearly.gif"))
 ```
-<<<<<<< HEAD
-=======
 
-```{r, fig.height=15, fig.width=20, message=FALSE, warning=FALSE}
+```{r LI2, fig.cap="Distribution of the top 5 Countries' medals among the 5 sports with the most participants", fig.height=15, fig.width=20, message=FALSE, warning=FALSE}
 ggplot(as.data.frame(ooo),
        aes(y = n, axis1 = Country, axis2 = Sport, axis3 = Event)) +
   geom_alluvium(aes(fill = Country), width = 1/40) +
@@ -350,18 +336,10 @@ ggplot(as.data.frame(ooo),
   scale_fill_brewer(type = "qual", palette = "Set3") +
   ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
 ```
->>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 
+## Compare the total medal won by different age for both female and male. (Qin_Xu)
 
-\section*{4}
-## First question: Compare the total medal won by different age for both female and male.
-<<<<<<< HEAD
-
-=======
-```{r data, message=FALSE, warning=FALSE}
-data<- read.csv("Data/athlete_events.csv")
-```
->>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
+According to @ elmenshawy2015rise, age at peak of athletics performance for women have increased in the last 20 years but not for men, hence in this section, we seek to compare the athletics performance of both gender by examining the medal results of athletes who attended Olympics from 1896 to 2016  by age and gender.
 
 ```{r data_wrangling1, message=FALSE, warning=FALSE}
 clean_data <- data %>% 
@@ -373,6 +351,7 @@ clean_data <- data %>%
 
 clean_data
 ```
+
 ```{r data_wrangling2}
 clean_data1 <- clean_data %>% 
 mutate(age_group = cut(Age,breaks = c(0,15,30,45,60,75,90))) %>% 
@@ -418,9 +397,9 @@ plot
 
 In Figure \@ref(fig:figure1), we have plotted the percentage of the total medal won by different age group and compared in against both gender of male and female.
 
-\@ref(fig:figure1),  depicts that for the age groups aged (0-15),(15-30),and (30-45), female athletes is accounted of  a higher proportion  of the total medal compared to males, However by the age group (45 to 60), males athletes exceed female athletes in the proportion of  total medal won and continues to have a higher proportion than female in the older age bracket. 
+In Figure \@ref(fig:figure1),  depicts that for the age groups aged (0-15),(15-30),and (30-45), female athletes is accounted of  a higher proportion  of the total medal compared to males, However by the age group (45 to 60), males athletes exceed female athletes in the proportion of  total medal won and continues to have a higher proportion than female in the older age bracket. 
 
-##Second question: Comparison of different medal distribution between age group by gender. 
+## Comparison of different medal distribution between age group by gender. (Qin_Xu)
 
 ```{r table2, message=FALSE, warning=FALSE}
 clean_data2 <- data %>% 
@@ -465,11 +444,7 @@ bronze<- clean_data2 %>%
   mutate("Percentage" = ((number/total_bronze_medal)*100)) 
 ```
 
-<<<<<<< HEAD
-```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female", fig.height = 5, fig.width = 6, fig.align='center', eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
-=======
 ```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
->>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 gold
 gold_plot<- ggplot(data=gold, aes(  x= Age,
                                       y= Percentage,
@@ -479,11 +454,8 @@ gold_plot<- ggplot(data=gold, aes(  x= Age,
   ggtitle("The distribution of gold medal won by different age group for female and male")
 ```
 
-<<<<<<< HEAD
-```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female", fig.height = 5, fig.width = 6, fig.align='center'}
-=======
 ```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
->>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
+
 silver 
 silver_plot<- ggplot(data=silver, aes(  Age,
                                       y= Percentage,
@@ -492,11 +464,7 @@ silver_plot<- ggplot(data=silver, aes(  Age,
   ggtitle("The distribution of silver medal won by different age group for female and male ")
 ```
 
-<<<<<<< HEAD
-```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female", fig.height = 5, fig.width = 6, fig.align='center'}
-=======
 ```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
->>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 bronze
 bronze_plot<- ggplot(data=bronze, aes(x=Age,
                                       y= Percentage,
@@ -523,3 +491,114 @@ Hence from the above analysis, we conclude that  in general for both gender, age
 In summary, from the presentation today, we conclude that for quesiton1 when comparing the distribution of medal in different country aound the world, America appears to have the most medals in the world. In addtional, for question two, we have found that the sport athletics have the largest number of athletics, and in this sports, The United States accumulated the most gold MEDALS in each year. 
 Furthermore for question three, we conclude that The United States has an absolute advantage in swimming events,The medals of United Kingdom are more distributed in Cycling. and that the Medals from other countries are very evenly distributed among the five events
 lastly. when comparing the medals won for different age group by gender, it was revealed that in general for both gender, age bracket from 20-40 and 40 to 60 in general has the most proporiton of medal won compared to other age group for gold, silver and bronze medal won.
+
+# References
+
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source
+  Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag
+  New York, 2016.
+
+Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2021).
+  dplyr: A Grammar of Data Manipulation. R package version 1.0.6.
+  https://CRAN.R-project.org/package=dplyr
+
+David Robinson, Alex Hayes and Simon Couch (2021). broom: Convert
+  Statistical Objects into Tidy Tibbles. R package version 0.7.6.
+  https://CRAN.R-project.org/package=broom
+
+Arel-Bundock et al., (2018). countrycode: An R package to convert country
+  names and country codes. Journal of Open Source Software, 3(28), 848,
+  https://doi.org/10.21105/joss.00848
+
+Silge J, Robinson D (2016). “tidytext: Text Mining and Analysis Using Tidy
+Data Principles in R.” _JOSS_, *1*(3). doi: 10.21105/joss.00037 (URL:
+https://doi.org/10.21105/joss.00037), <URL:
+http://dx.doi.org/10.21105/joss.00037>.
+
+  Simon Garnier, Noam Ross, Robert Rudis, Antônio P. Camargo, Marco Sciaini,
+  and Cédric Scherer (2021). Rvision - Colorblind-Friendly Color Maps for R.
+  R package version 0.6.0.
+
+South, Andy 2011 rworldmap: A New R package for Mapping Global Data. The R
+  Journal Vol. 3/1 : 35-43.
+
+  D. Kahle and H. Wickham. ggmap: Spatial Visualization with ggplot2. The R
+  Journal, 5(1), 144-161. URL
+  http://journal.r-project.org/archive/2013-1/kahle-wickham.pdf
+
+Original S code by Richard A. Becker, Allan R. Wilks. R version by Ray
+  Brownrigg. Enhancements by Thomas P Minka and Alex Deckmyn. (2018). maps:
+  Draw Geographical Maps. R package version 3.3.0.
+  https://CRAN.R-project.org/package=maps
+
+Pebesma, E.J., R.S. Bivand, 2005. Classes and methods for spatial data in
+  R. R News 5 (2), https://cran.r-project.org/doc/Rnews/.
+
+  Roger S. Bivand, Edzer Pebesma, Virgilio Gomez-Rubio, 2013. Applied spatial
+  data analysis with R, Second edition. Springer, NY. https://asdar-book.org/
+
+Roger Bivand and Nicholas Lewin-Koh (2021). maptools: Tools for Handling Spatial Objects.
+  R package version 1.1-1. https://CRAN.R-project.org/package=maptools
+  
+Baptiste Auguie (2017). gridExtra: Miscellaneous Functions
+  for "Grid" Graphics. R package version 2.3.
+  https://CRAN.R-project.org/package=gridExtra
+ 
+R Core Team (2021). R: A language and environment for
+  statistical computing. R Foundation for Statistical
+  Computing, Vienna, Austria. URL https://www.R-project.org/.
+ 
+Hadley Wickham and Dana Seidel (2020). scales: Scale
+  Functions for Visualization. R package version 1.1.1.
+  https://CRAN.R-project.org/package=scales
+ 
+Joe Cheng, Bhaskar Karambelkar and Yihui Xie (2021).
+  leaflet: Create Interactive Web Maps with the JavaScript
+  'Leaflet' Library. R package version 2.0.4.1.
+  https://CRAN.R-project.org/package=leaflet
+ 
+Hao Zhu (2021). kableExtra: Construct Complex Table with
+  'kable' and Pipe Syntax. R package version 1.3.4.
+  https://CRAN.R-project.org/package=kableExtra
+ 
+Bob Rudis (2020). hrbrthemes: Additional Themes, Theme
+  Components and Utilities for 'ggplot2'. R package version
+  0.8.0. https://CRAN.R-project.org/package=hrbrthemes
+ 
+Jason Cory Brunson and Quentin D. Read (2020). ggalluvial:
+  Alluvial Plots in 'ggplot2'. R package version 0.12.3.
+  http://corybrunson.github.io/ggalluvial/
+ 
+Jeroen Ooms (2021). gifski: Highest Quality GIF Encoder. R
+  package version 1.4.3-1.
+  https://CRAN.R-project.org/package=gifski
+ 
+Thomas Lin Pedersen and David Robinson (2020). gganimate: A
+  Grammar of Animated Graphics. R package version 1.0.7.
+  https://CRAN.R-project.org/package=gganimate
+ 
+Erich Neuwirth (2014). RColorBrewer: ColorBrewer Palettes.
+  R package version 1.1-2.
+  https://CRAN.R-project.org/package=RColorBrewer
+ 
+Csardi G, Nepusz T: The igraph software package for complex
+  network research, InterJournal, Complex Systems 1695. 2006.
+  https://igraph.org
+ 
+Thomas Lin Pedersen (2021). ggraph: An Implementation of
+  Grammar of Graphics for Graphs and Networks. R package
+  version 2.0.5. https://CRAN.R-project.org/package=ggraph
+  
+Hadley Wickham and Jim Hester (2020). readr: Read
+  Rectangular Text Data. R package version 1.4.0.
+  https://CRAN.R-project.org/package=readr
+
+Elmenshawy, A. R., Machin, D. R., & Tanaka, H. (2015). A rise in peak performance age in female athletes. Age, 37(3), 1-8.
+
+Kaggle.com. 2021. 120 years of Olympic history: athletes and results. [online] Available at:
+  <https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results>
+  [Accessed 23 May 2021].
+  
+Countries [ Latitude & Longitude ]. (2020, April 16). Kaggle. https://www.kaggle.com/franckepeixoto/countries
