@@ -2,7 +2,18 @@
 title: "Assignment 4"
 author: "Juntong Wei, Qin Xu, Xuanming Liang, Ziang Li"
 date: "`r Sys.Date()`"
-output: html_document
+bibliography: references.bib
+biblio-style: authoryear-comp
+linestretch: 1.5
+output:
+  bookdown::html_document2:
+    fig_caption: yes
+    fig_height: 5
+    fig_width: 8
+    keep_tex: yes
+    number_sections: yes
+    citation_package: biblatex
+    toc: false
 ---
 
 ```{r setup, include=FALSE}
@@ -10,7 +21,11 @@ knitr::opts_chunk$set(echo = FALSE,
                       messages = FALSE, 
                       warning = FALSE)
 
+<<<<<<< HEAD
 
+=======
+```{r, message=FALSE, warning=FALSE}
+>>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
@@ -33,25 +48,24 @@ library(ggalluvial)
 library(hrbrthemes)
 library(kableExtra)
 library(leaflet)
-library (scales)
-library (shiny)
-library(ggalluvial)
+library(scales)
 library(grid)
 library(gridExtra)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 data <- read_csv("data/athlete_events.csv")
 dat1 <- read_csv("data/countries.csv")
 ```
 
+#Introduction
 
-
+This report looks at the data from previous Olympic Games and finds some interesting points. It focuses on the number of medals, the age of the athletes, the gender, the country and the relationship between them. It focuses on the distribution and number of medals, the ranking of countries in terms of the number of medals won, the number of Olympic sports and the relationship between gender, age and medals won.
 
 \Section*{1}
 **Medal distribution by country**
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 medal <- data %>%
   filter(!is.na(Medal))
 
@@ -62,7 +76,7 @@ team<- medal %>%
             Bronze = sum (Medal == "Bronze"))
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 team_M <- team %>%
   pivot_longer(!"NOC", names_to = "medals", values_to = "number_of_medals")
 
@@ -72,7 +86,7 @@ country_M <- data_frame(country_M, team_M)
 country_M<- na.omit(country_M)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 team_T <- cbind(team, c(rowSums(team [, 2:4], na.rm = TRUE))) 
 colnames(team_T)[5] <- "Total"
 
@@ -91,17 +105,16 @@ country_T_10 <- country_T%>%
 knitr::kable(country_T_10, caption = "The medals in different country", col.names = c("Country",  "NOC", "Gold", "Silver", "Bronze", "Total"))
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 ct <- inner_join(country_T, dat1, by = "Country")
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 world <- map_data("world")
 visit.x<-ct$Longitude
 visit.y<-ct$Latitude
 ```
-
-```{r}
+```{r, message=FALSE, warning=FALSE}
 hex_codes <- hue_pal(h=c(180,270)) (length(ct$Country)) 
 pal <- colorFactor(hex_codes, domain = ct$Country)
 
@@ -141,14 +154,14 @@ The map shows the number of medals won by each country in the world at the Olymp
 \Section*{2}
 **Find out which sport has the largest number of participants and study the distribution of gold MEDALS in different countries over time**
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 sport_count<- data %>% 
   mutate(Number_of_people_in_each_sport = Sport) %>% 
   count(Number_of_people_in_each_sport) %>% 
   top_n(10) 
 ```
 
-```{r wei1, fig.cap="Top 10 sports with the most athletes", fig.align='center'}
+```{r wei1, fig.cap="Top 10 sports with the most athletes", fig.align='center', message=FALSE, warning=FALSE}
 sport_count %>% 
   mutate(Number_of_people_in_each_sport = fct_reorder(Number_of_people_in_each_sport, n)) %>% 
   ggplot(aes(x = Number_of_people_in_each_sport, 
@@ -170,7 +183,7 @@ sport_count %>%
 
 With the Figure \@ref(fig:wei1), It illustrate the number of participants in different sports, and select the top 10 of them, according to the figure, the most popular sports is **Athletics** which is 38,624. the second is **gymnastics** and the third one is **swimming**. the fine thing about this figure is that the number of participate athletes of first 3 sport is far more than any other sports. 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 Athletics_1 <- data %>% 
   filter(Sport == "Athletics" & Medal == "Gold")%>% 
   select(Sport, NOC, Medal, Year) %>% 
@@ -183,7 +196,7 @@ Athletics_1 <- data %>%
 Athletics <- inner_join(Athletics_1, country_T, by="NOC")
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 ranking <- Athletics %>%
   group_by(Year) %>%
   mutate(rank = rank(-Accumu),
@@ -194,15 +207,15 @@ ranking <- Athletics %>%
   ungroup()
 ```
 
-```{r wei2, fig.cap="In the Athletics sports, the ranking of first 5 contries about Total number of Cumulative gold MEDALS won ", fig.align='center'}
+```{r wei2, fig.cap="In the Athletics sports, the ranking of first 5 contries about Total number of Cumulative gold MEDALS won ", fig.align='center', message=FALSE, warning=FALSE}
 ggp <- ggplot(ranking, 
               aes(x = rank, 
                   y = Accumu, 
                   group = Country)) +
   geom_bar(stat = "identity", 
            aes(fill = Country)) +
-  transition_states(Year, transition_length = 2, state_length = 0) + 
-  ease_aes('quadratic-in-out') +  
+  transition_states(Year, transition_length = 2, state_length = 0) +
+ease_aes('quadratic-in-out') +  
   enter_drift(x_mod = -1) + exit_drift(x_mod = 1) +
   labs(x = "Ranking of the gold medal accumulated",
        y = "Accumulated Number of gold medal",
@@ -218,9 +231,16 @@ Then we focus on the athletics sports, the above Figure \@ref(fig:wei2) describe
 
 - Sometimes the bar overlapped on the x-axis, which means it shares the same ranking place in this year. 
 
-## How about the Medals of top 5 countries allocated in the events (Ziang_Li)
+\Section*{3}
+**How about the Medals of top 5 countries allocated in the events (Ziang_Li)**
 
-```{r}
+In the section 1, we discussed the number of medals each country has won in the previous Olympic Games. In section2, we analyzed the sports with the largest number of athletes participate in. Hence, in section3, we will compare the five countries with the most medals and the distribution of medals in the five events with the largest number of participants.
+
+From the figure, it clearly shows that the Medals changing of the Top5 countries in previous Olympic Games.  The United States has consistently ranked first in the total number of medals. After 1990, the number of medals in Germany has increased rapidly. And in 1998, Germany ranked second in the total number of medals.
+
+From the figure, it shows the distribution of the top5 countries medals among the 5 sports with the most participants. The number of medals in the United States is larger than the other four countries and The United States has an absolute advantage in swimming events, especially in the relay race events. The medals of United Kingdom are more distributed in Cycling. In addition, the medals from other countries are very evenly distributed among the five events
+
+```{r, message=FALSE, warning=FALSE}
 top1 <- country_T %>%
   top_n(5)
 
@@ -285,18 +305,7 @@ ooo <- left_join(rrr, ttt, by="Event")
 
 ```
 
-```{r, fig.height=15, fig.width=20}
-ggplot(as.data.frame(ooo),
-       aes(y = n, axis1 = Country, axis2 = Sport, axis3 = Event)) +
-  geom_alluvium(aes(fill = Country), width = 1/40) +
-  geom_stratum(width = 1/50, fill = "white", color = "black") +
-  geom_label(stat = "stratum", aes(label = after_stat(stratum)))+
-  scale_x_discrete(limits = c("Country", "Sport", "Event"), expand = c(.05, .05)) +
-  scale_fill_brewer(type = "qual", palette = "Set3") +
-  ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
-```
-
-```{r}
+```{r, message=FALSE, warning=FALSE}
 qqq <- data %>% 
   filter(!is.na(Medal)) %>%
   select (NOC, Year, Medal)%>% 
@@ -315,7 +324,7 @@ www <- qqq %>%
 
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
     geom_line() +
     geom_point() +
@@ -328,13 +337,33 @@ q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
 animate(q, nframes = 350,fps = 25,  width = 1200, height = 1000, 
         renderer = gifski_renderer("yearly.gif"))
 ```
+<<<<<<< HEAD
+=======
+
+```{r, fig.height=15, fig.width=20, message=FALSE, warning=FALSE}
+ggplot(as.data.frame(ooo),
+       aes(y = n, axis1 = Country, axis2 = Sport, axis3 = Event)) +
+  geom_alluvium(aes(fill = Country), width = 1/40) +
+  geom_stratum(width = 1/50, fill = "white", color = "black") +
+  geom_label(stat = "stratum", aes(label = after_stat(stratum)))+
+  scale_x_discrete(limits = c("Country", "Sport", "Event"), expand = c(.05, .05)) +
+  scale_fill_brewer(type = "qual", palette = "Set3") +
+  ggtitle("Distribution of the top 5 Countries' medals among the 5 sports with the most participants")
+```
+>>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 
 
 \section*{4}
 ## First question: Compare the total medal won by different age for both female and male.
+<<<<<<< HEAD
 
+=======
+```{r data, message=FALSE, warning=FALSE}
+data<- read.csv("Data/athlete_events.csv")
+```
+>>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 
-```{r data_wrangling1}
+```{r data_wrangling1, message=FALSE, warning=FALSE}
 clean_data <- data %>% 
   select (c("Sex","Age","Medal")) %>% 
   mutate(Sex=as.factor(Sex),
@@ -354,14 +383,13 @@ select(-Age) %>%
 clean_data1
 ```
 
-```{r data_wrangling3}
+```{r data_wrangling3, message=FALSE, warning=FALSE}
 table1<- clean_data1 %>% 
     group_by (Sex,age_group) %>% 
   summarise(total_medal_in_age_group= sum(number))
   
 table1
 ```
-
 ```{r table1,  eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
 
 percentage<- table1 %>% 
@@ -394,7 +422,7 @@ In Figure \@ref(fig:figure1), we have plotted the percentage of the total medal 
 
 ##Second question: Comparison of different medal distribution between age group by gender. 
 
-```{r table2}
+```{r table2, message=FALSE, warning=FALSE}
 clean_data2 <- data %>% 
   select (c("Sex","Age","Medal")) %>% 
   mutate(Sex=as.factor(Sex),
@@ -415,7 +443,7 @@ gold<- clean_data2 %>%
   mutate("Percentage" = ((number/total_silver_medal)*100)) 
 ```
 
-```{r table3}
+```{r table3, message=FALSE, warning=FALSE}
 silver1<- clean_data2 %>% 
   filter(Medal== "Silver") %>% 
   group_by(Sex) %>% 
@@ -426,7 +454,7 @@ silver<- clean_data2 %>%
   mutate("Percentage" = ((number/total_silver_medal)*100)) 
 ```
 
-```{r table4}
+```{r table4, message=FALSE, warning=FALSE}
 bronze1<- clean_data2 %>% 
   filter(Medal== "Bronze") %>% 
   group_by(Sex) %>% 
@@ -437,7 +465,11 @@ bronze<- clean_data2 %>%
   mutate("Percentage" = ((number/total_bronze_medal)*100)) 
 ```
 
+<<<<<<< HEAD
 ```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female", fig.height = 5, fig.width = 6, fig.align='center', eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+=======
+```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
+>>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 gold
 gold_plot<- ggplot(data=gold, aes(  x= Age,
                                       y= Percentage,
@@ -447,7 +479,11 @@ gold_plot<- ggplot(data=gold, aes(  x= Age,
   ggtitle("The distribution of gold medal won by different age group for female and male")
 ```
 
+<<<<<<< HEAD
 ```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female", fig.height = 5, fig.width = 6, fig.align='center'}
+=======
+```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
+>>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 silver 
 silver_plot<- ggplot(data=silver, aes(  Age,
                                       y= Percentage,
@@ -456,7 +492,11 @@ silver_plot<- ggplot(data=silver, aes(  Age,
   ggtitle("The distribution of silver medal won by different age group for female and male ")
 ```
 
+<<<<<<< HEAD
 ```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female", fig.height = 5, fig.width = 6, fig.align='center'}
+=======
+```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
+>>>>>>> dd19269e69f86ca537f6795f3f8ff69f6ecba23d
 bronze
 bronze_plot<- ggplot(data=bronze, aes(x=Age,
                                       y= Percentage,
@@ -465,21 +505,21 @@ bronze_plot<- ggplot(data=bronze, aes(x=Age,
   ggtitle("The distribution of bronze medal won by different age group for female and male ")
 ```
 
-```{r figure2, fig.cap="The medal distribution won in different age group by sex", fig.height = 5, fig.width = 6, fig.align='center', eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+```{r figure2, fig.cap="The medal distribution won in different age group by sex", fig.height = 5, fig.width = 6, fig.align='center', message=FALSE, warning=FALSE}
 
 grid.arrange(gold_plot,silver_plot,bronze_plot, ncol=2)
 
 ```
-In Figure \@ref(fig:figure2), the different medal distribution was plotted for different age and compared in against both gender of male and female.
+
+n Figure \@ref(fig:figure2), the different medal distribution was plotted for different age and compared in against both gender of male and female.
 
 From this plot. the gold medal distribution for female and male are positively skewed with the athletes in the younger age group accounting for more of the gold medals earned than the older athletes (specifically, both female and male athletes age in early 20s have the highest percentage of the gold medal won).Similar result could be seen for silver medal distribution, both distribution for female and male athlete are positively skewed, however we can see that the age group that account the most percentage of silver medal won is ranged from 20-30 years older for both female and male athletes. In the bronze medal distribution, it shares similar distribution as silver medal as athletes age from 20 to 30 is account for the most percentage of bronze medal won for both female and male. 
 Additionally, it is seen that for all medal distribution, female athletes of younger age (0-20) tend to account for higher percentage of medal (gold, silver, and bronze) than male athletes, however by age 30 and over, male athletes exceed female athletes in medal won for gold, silver and bronze medal.  This could be due the quicker fall of physical, technical and strategics abilities of females athletes 30 and over , companied with increasing social pressure that female of an older age to be more family orientated.
 
-Hence from the above analysis, we conclude that  in general for both gender, age 20 to 30 tends to account for most proportions of the medals (gold, silver, and bronze)won, furthermore, it was found that female athletes tends to do better than male for medal wons before age20, however later was exceed by male after age 30.
+Hence from the above analysis, we conclude that  in general for both gender, age 20 to 30 tends to account for most proportions of the medals (gold, silver, and bronze)won, furthermore, it was found that female athletes tends to do better than male for medal won before age20, however later was exceed by male after age 30.
 
 # Conclusion  
 
 In summary, from the presentation today, we conclude that for quesiton1 when comparing the distribution of medal in different country aound the world, America appears to have the most medals in the world. In addtional, for question two, we have found that the sport athletics have the largest number of athletics, and in this sports, The United States accumulated the most gold MEDALS in each year. 
 Furthermore for question three, we conclude that The United States has an absolute advantage in swimming events,The medals of United Kingdom are more distributed in Cycling. and that the Medals from other countries are very evenly distributed among the five events
-lastly. when comparing the medals won for different age group by gender, it was revealed that in general for both gender, age bracket from 20-40 and 40 to 60 in general has the most proporiton of medal won compared to other age group for gold, silver and bronze medal won. 
-
+lastly. when comparing the medals won for different age group by gender, it was revealed that in general for both gender, age bracket from 20-40 and 40 to 60 in general has the most proporiton of medal won compared to other age group for gold, silver and bronze medal won.
