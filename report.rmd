@@ -216,6 +216,12 @@ Then we focus on the athletics sports, the above Figure \@ref(fig:wei2) describe
 \Section*{3}
 **How about the Medals of top 5 countries allocated in the events (Ziang_Li)**
 
+In the section 1, we discussed the number of medals each country has won in the previous Olympic Games. In section2, we analyzed the sports with the largest number of athletes participate in. Hence, in section3, we will compare the five countries with the most medals and the distribution of medals in the five events with the largest number of participants.
+
+From the figure, it clearly shows that the Medals changing of the Top5 countries in previous Olympic Games.  The United States has consistently ranked first in the total number of medals. After 1990, the number of medals in Germany has increased rapidly. And in 1998, Germany ranked second in the total number of medals.
+
+From the figure, it shows the distribution of the top5 countries medals among the 5 sports with the most participants. The number of medals in the United States is larger than the other four countries and The United States has an absolute advantage in swimming events, especially in the relay race events. The medals of United Kingdom are more distributed in Cycling. In addition, the medals from other countries are very evenly distributed among the five events
+
 ```{r, message=FALSE, warning=FALSE}
 top1 <- country_T %>%
   top_n(5)
