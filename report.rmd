@@ -2,7 +2,18 @@
 title: "Assignment 4"
 author: "Juntong Wei, Qin Xu, Xuanming Liang, Ziang Li"
 date: "`r Sys.Date()`"
-output: html_document
+bibliography: references.bib
+biblio-style: authoryear-comp
+linestretch: 1.5
+output:
+  bookdown::html_document2:
+    fig_caption: yes
+    fig_height: 5
+    fig_width: 8
+    keep_tex: yes
+    number_sections: yes
+    citation_package: biblatex
+    toc: false
 ---
 
 ```{r setup, include=FALSE}
