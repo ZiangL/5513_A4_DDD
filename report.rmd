@@ -6,12 +6,11 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
+knitr::opts_chunk$set(echo = FALSE, 
                       messages = FALSE, 
                       warning = FALSE)
-```
 
-```{r setup, include=FALSE}
+
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
@@ -329,14 +328,11 @@ q <- ggplot(www, aes(x=Year, y=total, group=Country, color=Country)) +
 animate(q, nframes = 350,fps = 25,  width = 1200, height = 1000, 
         renderer = gifski_renderer("yearly.gif"))
 ```
-=======
-#Introduction 
 
-\section*{Comparing Olympic medals result for athletes of different age by gender}
+
+\section*{4}
 ## First question: Compare the total medal won by different age for both female and male.
-```{r data}
-data<- read.csv("Data/athlete_events.csv")
-```
+
 
 ```{r data_wrangling1}
 clean_data <- data %>% 
@@ -441,7 +437,7 @@ bronze<- clean_data2 %>%
   mutate("Percentage" = ((number/total_bronze_medal)*100)) 
 ```
 
-```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center", eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
+```{r goldf, fig.cap = "The gold medal distribution between different age group for male and female", fig.height = 5, fig.width = 6, fig.align='center', eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE}
 gold
 gold_plot<- ggplot(data=gold, aes(  x= Age,
                                       y= Percentage,
@@ -451,7 +447,7 @@ gold_plot<- ggplot(data=gold, aes(  x= Age,
   ggtitle("The distribution of gold medal won by different age group for female and male")
 ```
 
-```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center"}
+```{r silverf,fig.cap = "The silver medal distribution between different age group for male and female", fig.height = 5, fig.width = 6, fig.align='center'}
 silver 
 silver_plot<- ggplot(data=silver, aes(  Age,
                                       y= Percentage,
@@ -460,7 +456,7 @@ silver_plot<- ggplot(data=silver, aes(  Age,
   ggtitle("The distribution of silver medal won by different age group for female and male ")
 ```
 
-```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female ", fig.height = 5, fig.width = 6, fig.align='center"}
+```{r bronzef, fig.cap = "The bronze medal distribution between different age group for male and female", fig.height = 5, fig.width = 6, fig.align='center'}
 bronze
 bronze_plot<- ggplot(data=bronze, aes(x=Age,
                                       y= Percentage,
